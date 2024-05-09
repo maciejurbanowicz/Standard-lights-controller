@@ -75,26 +75,36 @@ Furthermore, it saves lights status in the global variables, so the telemetry fu
 
 void LightsController() {
   {
-  if ((switch1status == 1 && switch2status == 1) || (switch1status == 0 && switch2status == 1)) {
+  if (switch1status == 1 && switch2status == 1) {
     digitalWrite(LightPinLeft,LOW); //Left light off
     digitalWrite(LightPinRight,LOW); //Right light off
     digitalWrite(led1,LOW); //LED off
     lightLstatus = 0; //telemtry status
     lightRstatus = 0; //telemtry status
+    digitalWrite(LEDR,HIGH);
+    digitalWrite(LEDG,HIGH);
+    digitalWrite(LEDB,HIGH);
     }
-    if (switch1status == 1 && switch2status == 0) {
+    if ((switch1status == 1 && switch2status == 0) || (switch1status == 0 && switch2status == 1) ){
       digitalWrite(LightPinLeft,HIGH);  //Left light on
       digitalWrite(LightPinRight,HIGH);  //Right light on
       digitalWrite(led1,HIGH); //LED on
       lightLstatus = 1; //telemtry status
       lightRstatus = 1; //telemtry status
+      digitalWrite(LEDR,LOW);
+      digitalWrite(LEDG,HIGH);
+      digitalWrite(LEDB,HIGH);
       }
     if (switch1status == 0 && switch2status == 0) {
+      //If such case happens, then the main switch (switch 1 and 2) are broken
       digitalWrite(LightPinLeft,LOW);  //Left light off
       digitalWrite(LightPinRight,LOW); //Right light off
-      digitalWrite(led1,LOW); //LED off
+      digitalWrite(led1,HIGH); //LED off
       lightLstatus = 0; //telemtry status
       lightRstatus = 0; //telemtry status
+      digitalWrite(LEDR,LOW);
+      digitalWrite(LEDG,LOW);
+      digitalWrite(LEDB,LOW);
     }
   }  
 }
@@ -126,7 +136,18 @@ void setup() {
   pinMode(LightPinRight,OUTPUT);
 
   pinMode(led1,OUTPUT);
-
+  pinMode(LEDR,OUTPUT);
+  pinMode(LEDG,OUTPUT);
+  pinMode(LEDB,OUTPUT);
+  
+  //default settings for LEDs
+  {
+    digitalWrite(LEDR,HIGH);
+    digitalWrite(LEDG,HIGH);
+    digitalWrite(LEDB,HIGH);
+    digitalWrite(led1,LOW);
+  }
+  
   //SwitchesReading(); //Initial reading of the statuses of the switches.
 
   attachInterrupt(digitalPinToInterrupt(switch1),SwitchesReading,CHANGE);
@@ -136,6 +157,6 @@ void setup() {
 }
 
 void loop() {
-  telemetry();
+  //telemetry();
   //LightsController();
 }
