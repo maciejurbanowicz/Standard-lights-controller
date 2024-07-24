@@ -45,7 +45,7 @@ void SwitchesReading() {
   switch1statustemp = 0;
   switch2statustemp = 0;
   int iterations = 1000;
-  int threshold = 50;
+  int threshold = 500;
   {
     for (int i = 0 ; i<iterations; i++) {
       switch1statustemp = switch1statustemp + digitalRead(switch1);
@@ -157,6 +157,6 @@ void setup() {
 }
 
 void loop() {
-  //telemetry();
+  telemetry();
   //LightsController();
 }
